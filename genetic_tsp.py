@@ -1,6 +1,5 @@
 import math
 import random
-import sys
 import imp
 
 
@@ -26,32 +25,15 @@ class City:
         return math.sqrt((xDistance * xDistance) + (yDistance * yDistance))
 
 
-class TourManager:
-    def __init__(self):
-        self.destinationCities = []
-    
-    def __getitem__(self, index):
-        return self.destinationCities[index]
-
-    def __len__(self):
-        return len(self.destinationCities)
-
-    def append(self, city):
-        self.destinationCities.append(city)
-    
-    def length(self):
-        return len(self.destinationCities)
-
-
 class Tour:
-    def __init__(self, tourmanager, tour=None):
-        self.tourmanager = tourmanager
+    def __init__(self, citylist, tour=None):
+        self.citylist = citylist
         self.fitness = 0.0
         self.distance = 0
         if tour is not None:
             self.tour = tour
         else:
-            self.tour = [None] * len(self.tourmanager)
+            self.tour = [None] * len(self.citylist)
     
     def __len__(self):
         return len(self.tour)
@@ -71,8 +53,8 @@ class Tour:
         return tourString
     
     def generateIndividual(self):
-        for i in range(len(self.tourmanager)):
-            self[i] = self.tourmanager[i]
+        for i in range(len(self.citylist)):
+            self[i] = self.citylist[i]
         random.shuffle(self.tour)
     
     def getFitness(self):
@@ -113,11 +95,11 @@ class Tour:
 
 
 class Population:
-    def __init__(self, tourmanager, populationSize, generate):
+    def __init__(self, citylist, populationSize, generate):
         self.tours = [None] * populationSize
         if generate:
             for i in range(populationSize):
-                newTour = Tour(tourmanager)
+                newTour = Tour(citylist)
                 newTour.generateIndividual()
                 self[i] = newTour
     
@@ -139,14 +121,14 @@ class Population:
 
 
 class TSPGeneticAlgorithm:
-    def __init__(self, tourmanager, mutationRate=0.015, tournamentSize=5, elitism=True):
-        self.tourmanager = tourmanager
+    def __init__(self, citylist, mutationRate=0.015, tournamentSize=5, elitism=True):
+        self.citylist = citylist
         self.mutationRate = mutationRate
         self.tournamentSize = tournamentSize
         self.elitism = elitism
     
     def evolvePopulation(self, population):
-        evolved = Population(self.tourmanager, len(population), False)
+        evolved = Population(self.citylist, len(population), False)
         elitismOffset = 0
         if self.elitism:
             evolved[0] = population.getFittest()
@@ -163,7 +145,7 @@ class TSPGeneticAlgorithm:
         return evolved
     
     def tournamentSelection(self, population):
-        tournament = Population(self.tourmanager, self.tournamentSize, False)
+        tournament = Population(self.citylist, self.tournamentSize, False)
         for i in range(self.tournamentSize):
             randomId = int(random.random() * len(population))
             tournament[i] = population[randomId]
@@ -171,7 +153,7 @@ class TSPGeneticAlgorithm:
         return fittest
 
     def crossover(self, parent1, parent2):
-        child = Tour(self.tourmanager)
+        child = Tour(self.citylist)
 
         pos1 = int(random.random() * len(parent1))
         pos2 = int(random.random() * len(parent2))
@@ -195,26 +177,23 @@ class TSPGeneticAlgorithm:
 
 
 if __name__ == '__main__':
-    tourmanager = TourManager()
+    citylist = []
     print 'Enter number of cities: '
-    nCities = int(raw_input())
-    print '(e)nter coordinates or use (r)andom cities? '
+    n = int(raw_input())
+    print 'Use random city coordinates? (y/n) '
     r = raw_input()
-    for _ in range(nCities):
-        if r == 'r':
-            tourmanager.append(City())
-        elif r == 'e':
+    for _ in range(n):
+        if r == 'y':
+            citylist.append(City())
+        else:
             print 'Enter x y: '
             x, y = map(int, raw_input().split())
-            tourmanager.append(City(x, y))
-        else:
-            print 'Invalid'
-            sys.exit(0)
+            citylist.append(City(x, y))
     
-    population = Population(tourmanager, 50, True);
+    population = Population(citylist, 50, True);
     print 'Generation#0: ' + str(population.getFittest().getDistance())
     
-    ga = TSPGeneticAlgorithm(tourmanager)
+    ga = TSPGeneticAlgorithm(citylist)
     for i in range(100):
         population = ga.evolvePopulation(population)
         print 'Generation#' + str(i+1) + ': ' + str(population.getFittest().getDistance())
