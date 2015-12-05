@@ -45,9 +45,9 @@ class Tour:
         self.distance = 0
     
     def __repr__(self):
-        tourString = '|'
+        tourString = '-'
         for city in self.tour:
-            tourString += str(city) + '|'
+            tourString += str(city) + '-'
         return tourString
     
     def generateIndividual(self):
@@ -119,11 +119,23 @@ class Population:
 
 
 class TSPGeneticAlgorithm:
-    def __init__(self, citylist, mutationRate=0.015, tournamentSize=5, elitism=True):
+    def __init__(self, citylist, mutationRate=0.02, tournamentSize=5, elitism=True):
         self.citylist = citylist
         self.mutationRate = mutationRate
         self.tournamentSize = tournamentSize
         self.elitism = elitism
+
+    def run(self, generations=100, populationSize=50):
+        population = Population(self.citylist, populationSize, True)
+        print 'Generation#0: ' + str(population.getFittest().getDistance())
+        
+        for i in range(generations):
+            population = self.evolvePopulation(population)
+            print 'Generation#' + str(i+1) + ': ' + str(population.getFittest().getDistance())
+        
+        print 'Solution:'
+        print population.getFittest()
+        population.getFittest().plot()
     
     def evolvePopulation(self, population):
         evolved = Population(self.citylist, len(population), False)
@@ -188,14 +200,5 @@ if __name__ == '__main__':
             x, y = map(int, raw_input().split())
             citylist.append(City(x, y))
     
-    population = Population(citylist, 50, True);
-    print 'Generation#0: ' + str(population.getFittest().getDistance())
-    
     ga = TSPGeneticAlgorithm(citylist)
-    for i in range(100):
-        population = ga.evolvePopulation(population)
-        print 'Generation#' + str(i+1) + ': ' + str(population.getFittest().getDistance())
-    
-    print 'Solution:'
-    print population.getFittest()
-    population.getFittest().plot()
+    ga.run()
