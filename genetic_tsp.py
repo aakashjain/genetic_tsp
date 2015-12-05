@@ -5,8 +5,6 @@ import imp
 
 class City:
     def __init__(self, x=None, y=None):
-        self.x = None
-        self.y = None
         if x is not None:
             self.x = x
         else:
