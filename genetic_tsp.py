@@ -166,8 +166,11 @@ class TSPGeneticAlgorithm:
         child = Tour(self.citylist)
         
         pos1 = int(random.random() * len(parent1))
-        pos2 = int(random.random() * len(parent2))
+        pos2 = int(random.random() * len(parent1))
+        while pos1 == pos2:
+            pos2 = int(random.random() * len(parent1))
         startPos, endPos = min(pos1, pos2), max(pos1, pos2)
+        
         for i in range(startPos, endPos+1):
             child[i] = parent1[i]
         
@@ -183,6 +186,8 @@ class TSPGeneticAlgorithm:
         for i in range(len(tour)):
             if random.random() <= self.mutationRate:
                 j = int(len(tour) * random.random())
+                while j == i:
+                    j = int(len(tour) * random.random())
                 tour[i], tour[j] = tour[j], tour[i]
 
 
