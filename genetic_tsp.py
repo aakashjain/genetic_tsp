@@ -176,11 +176,11 @@ class TSPGeneticAlgorithm:
         fittest = tournament.getFittest()
         return fittest
     
-    # two point crossover
+    # two point crossover of no more than half the length
     def crossover(self, parent1, parent2):
         pos1 = int(random.random() * len(parent1))
         pos2 = int(random.random() * len(parent1))
-        while pos1 == pos2:
+        while pos1 == pos2 or abs(pos1 - pos2) > len(parent1)/2:
             pos2 = int(random.random() * len(parent1))
         startPos, endPos = min(pos1, pos2), max(pos1, pos2)
         
