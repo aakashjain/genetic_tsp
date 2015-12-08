@@ -173,12 +173,22 @@ class TSPGeneticAlgorithm:
         startPos, endPos = min(pos1, pos2), max(pos1, pos2)
         
         child1 = Tour(self.citylist)
-        child1[:] = parent1[:]
         child1[startPos:endPos+1] = parent2[startPos:endPos+1]
+        j = 0
+        for i in range(len(parent1)):
+            if parent1[i] not in child1:
+                while child1[j] != None:
+                    j += 1
+                child1[j] = parent1[i]
 
         child2 = Tour(self.citylist)
-        child2[:] = parent2[:]
         child2[startPos:endPos+1] = parent1[startPos:endPos+1]
+        j = 0
+        for i in range(len(parent2)):
+            if parent2[i] not in child2:
+                while child2[j] != None:
+                    j += 1
+                child2[j] = parent2[i]
 
         return child1, child2
     
