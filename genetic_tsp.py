@@ -119,11 +119,12 @@ class Population:
 
 
 class TSPGeneticAlgorithm:
-    def __init__(self, citylist, populationSize=50, tournamentSize=5, elitism=True, mutationRate=0.02):
+    def __init__(self, citylist, populationSize=100, tournamentSize=10, elitism=True, mutationRate=0.02):
         self.citylist = citylist
-        self.mutationRate = mutationRate
+        self.populationSize = populationSize
         self.tournamentSize = tournamentSize
         self.elitism = elitism
+        self.mutationRate = mutationRate
     
     def run(self, generations=100):
         population = Population(self.citylist, self.populationSize, True)
@@ -213,4 +214,4 @@ if __name__ == '__main__':
             citylist.append(City(x, y))
     
     ga = TSPGeneticAlgorithm(citylist)
-    ga.run(100)
+    ga.run()
