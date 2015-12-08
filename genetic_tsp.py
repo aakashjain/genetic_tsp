@@ -144,10 +144,13 @@ class TSPGeneticAlgorithm:
             evolved[0] = population.getFittest()
             elitismOffset = 1
         
-        for i in range(elitismOffset, len(evolved)):
+        for i in range(elitismOffset, len(evolved), 2):
             parent1 = self.tournamentSelection(population)
             parent2 = self.tournamentSelection(population)
-            evolved[i] = self.crossover(parent1, parent2)
+            if i+1 < len(evolved):
+                evolved[i], evolved[i+1] = self.crossover(parent1, parent2)
+            else:
+                evolved[i],_ = self.crossover(parent1, parent2)
         
         for i in range(elitismOffset, len(evolved)):
             self.mutate(evolved[i])
@@ -163,24 +166,22 @@ class TSPGeneticAlgorithm:
         return fittest
     
     def crossover(self, parent1, parent2):
-        child = Tour(self.citylist)
-        
         pos1 = int(random.random() * len(parent1))
         pos2 = int(random.random() * len(parent1))
         while pos1 == pos2:
             pos2 = int(random.random() * len(parent1))
         startPos, endPos = min(pos1, pos2), max(pos1, pos2)
         
-        for i in range(startPos, endPos+1):
-            child[i] = parent1[i]
-        
-        for i in range(len(parent2)):
-            if not child.contains(parent2[i]):
-                for j in range(len(child)):
-                    if child[j] == None:
-                        child[j] = parent2[i]
-                        break
-        return child
+        child1 = Tour(self.citylist)
+        child1[:] = parent1[:]
+        child1[startPos:endPos] = parent2[startPos:endPos]
+
+        child2 = Tour(self.citylist)
+        child2[:] = parent2[:]
+        print type(child2)
+        child2[startPos:endPos] = parent1[startPos:endPos]
+
+        return child1, child2
     
     def mutate(self, tour):
         for i in range(len(tour)):
