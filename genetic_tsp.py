@@ -119,14 +119,14 @@ class Population:
 
 
 class TSPGeneticAlgorithm:
-    def __init__(self, citylist, mutationRate=0.02, tournamentSize=5, elitism=True):
+    def __init__(self, citylist, populationSize=50, tournamentSize=5, elitism=True, mutationRate=0.02):
         self.citylist = citylist
         self.mutationRate = mutationRate
         self.tournamentSize = tournamentSize
         self.elitism = elitism
     
-    def run(self, generations=100, populationSize=50):
-        population = Population(self.citylist, populationSize, True)
+    def run(self, generations=100):
+        population = Population(self.citylist, self.populationSize, True)
         print 'Generation#0: ' + str(population.getFittest().getDistance())
         
         for i in range(generations):
@@ -213,4 +213,4 @@ if __name__ == '__main__':
             citylist.append(City(x, y))
     
     ga = TSPGeneticAlgorithm(citylist)
-    ga.run()
+    ga.run(100)
