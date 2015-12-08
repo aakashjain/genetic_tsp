@@ -174,12 +174,11 @@ class TSPGeneticAlgorithm:
         
         child1 = Tour(self.citylist)
         child1[:] = parent1[:]
-        child1[startPos:endPos] = parent2[startPos:endPos]
+        child1[startPos:endPos+1] = parent2[startPos:endPos+1]
 
         child2 = Tour(self.citylist)
         child2[:] = parent2[:]
-        print type(child2)
-        child2[startPos:endPos] = parent1[startPos:endPos]
+        child2[startPos:endPos+1] = parent1[startPos:endPos+1]
 
         return child1, child2
     
