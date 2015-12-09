@@ -9,11 +9,11 @@ class City:
         if x is not None:
             self.x = x
         else:
-            self.x = int(random.random() * 200)
+            self.x = int(random.random() * 500)
         if y is not None:
             self.y = y
         else:
-            self.y = int(random.random() * 200)
+            self.y = int(random.random() * 500)
     
     def __repr__(self):
         return '(' + str(self.x) + ',' + str(self.y) + ')'
@@ -72,7 +72,7 @@ class Tour:
        
     def contains(self, city):
         return city in self.tour
-
+    
     # show the tour as a graph, requires matplotlib
     def plot(self):
         try:
@@ -84,10 +84,11 @@ class Tour:
                 y.append(self[i].y)
             plt.plot(x[0], y[0], 'bs')
             plt.plot(x[1:], y[1:], 'co')
+            scale = max(x)/50
             n = len(x)
             for i in range(n):
                 plt.arrow(x[i], y[i], (x[(i+1)%n] - x[i]), (y[(i+1)%n] - y[i]),
-                          head_width=4, color='g', length_includes_head=True)
+                          head_width=scale, color='g', length_includes_head=True)
             plt.xlim(0, max(x)*1.1)
             plt.ylim(0, max(y)*1.1)
             plt.show()
@@ -192,7 +193,7 @@ class TSPGeneticAlgorithm:
                 while child1[j] != None:
                     j += 1
                 child1[j] = parent1[i]
-
+        
         child2 = Tour(self.cityList)
         child2[startPos:endPos+1] = parent1[startPos:endPos+1]
         j = 0
@@ -201,7 +202,7 @@ class TSPGeneticAlgorithm:
                 while child2[j] != None:
                     j += 1
                 child2[j] = parent2[i]
-
+        
         return child1, child2
     
     # mutate by randomly swapping positions in the Tour
