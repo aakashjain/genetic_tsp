@@ -3,7 +3,7 @@ import random
 import imp
 
 
-class City:
+class City(object):
     # for random initializion, leave coordinates blank
     def __init__(self, x=None, y=None):
         if x is not None:
@@ -24,7 +24,7 @@ class City:
         return math.sqrt((xDistance * xDistance) + (yDistance * yDistance))
 
 
-class Tour:
+class Tour(object):
     # can be used as an array containing Cities in travel order
     # takes a list of City objects
     def __init__(self, cityList):
@@ -96,7 +96,7 @@ class Tour:
             print 'Could not find matplotlib'
 
 
-class Population:
+class Population(object):
     # can be used as an array containing Tours
     # generate = True to generate an initial population
     def __init__(self, cityList, populationSize, generate):
@@ -125,7 +125,7 @@ class Population:
         return fittest
 
 
-class TSPGeneticAlgorithm:
+class TSPGeneticAlgorithm(object):
     # forms the GA with a few parameters
     def __init__(self, cityList, populationSize=100, tournamentSize=10, elitism=True, mutationRate=0.02):
         self.cityList = cityList
